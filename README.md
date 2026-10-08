@@ -15,35 +15,42 @@ npm run build    # typecheck and build to dist/
 
 ## Sections
 
+Both sections share the same layout: a step-through interpreter on the left (pseudocode with the current line highlighted, live variables, and the arithmetic in exact fractions) and the geometry on the right, animated in sync. Keyboard: <kbd>Space</kbd> play/pause, <kbd>←</kbd>/<kbd>→</kbd> step, <kbd>Home</kbd>/<kbd>End</kbd> jump.
+
 ### Transformations
 
-- Edit a 2×2 or 3×3 matrix and watch the grid morph from the identity to it.
-- Basis vectors **î, ĵ, k̂** are drawn as arrows — the columns of the matrix are exactly where they land.
-- The unit square / cube shows the **determinant** as an area / volume scale (and orientation flip when det < 0).
+Step through applying a 2×2 or 3×3 matrix A to a vector v:
+
+- **Coordinates as a recipe:** v = x·î + y·ĵ, drawn head to tail.
+- **Moving the basis:** each basis vector moves to its column of A, dragging the grid with it, and v rides along because it is glued to the grid.
+- **Column picture:** the same recipe along the moved basis lands on Av.
+- **Row picture:** each coordinate of Av is a row of A times v, shown with a guide to the axis.
+- **Determinant:** the image of the unit square/cube, with its area/volume computed by cofactor expansion.
 
 ### Gaussian Elimination
 
-A step-through interpreter on the left, the geometry on the right, in sync:
-
-- Pseudocode for Gauss–Jordan elimination with the current line highlighted, live variables (`r`, `c`, `p`, `i`, `m`) and the arithmetic for each row operation, using exact fractions.
-- The augmented matrix [A | b] with the pivot, active rows and changed entries highlighted.
+- Gauss–Jordan elimination on [A | b], with the pivot, active rows and changed entries highlighted.
 - **Row picture:** each equation is a line (2D) or plane (3D). Row replacements swing a line/plane around the solution, which never moves; swaps and scalings leave the geometry untouched.
 - **Transformation picture:** A as a grid transformation. Replacements are shears (det unchanged), swaps are reflections (det flips sign), scalings scale det. The dot for b lands on x once A has become I.
-- Examples for unique, row-swap, infinitely-many and no-solution systems, or enter your own (integers, fractions like `-3/2`, or decimals).
-- Keyboard: <kbd>Space</kbd> play/pause, <kbd>←</kbd>/<kbd>→</kbd> step, <kbd>Home</kbd>/<kbd>End</kbd> jump.
+- Examples for unique, row-swap, infinitely-many and no-solution systems.
+
+Both sections take your own input via **Custom…** (integers, fractions like `-3/2`, or decimals).
 
 ## Project structure
 
 ```
 src/
-  main.ts                        navigation between sections
-  core/viewport.ts               Three.js canvas with 2D/3D cameras and controls
-  math/matrix.ts                 matrix helpers (interpolation, conversions, easing)
-  math/fraction.ts               exact rational arithmetic
-  scene/grid.ts                  lattice grid, unit square/cube, axes
-  scene/basis.ts                 vector arrows
-  modes/transformations.ts       Transformations section
-  modes/elimination/algorithm.ts elimination tracer (one step per pseudocode line)
-  modes/elimination/geometry.ts  row picture and transformation picture
-  modes/elimination/index.ts     Gaussian Elimination section UI and playback
+  main.ts                            navigation between sections
+  core/viewport.ts                   Three.js canvas with 2D/3D cameras and controls
+  core/stepper.ts                    shared interpreter layout: editor, playback, code, narration
+  math/fraction.ts                   exact rational arithmetic
+  math/notation.ts                   shared types and variable names
+  scene/grid.ts                      lattice grid, unit square/cube, axes, labels
+  scene/basis.ts                     vector arrows
+  modes/transformations/algorithm.ts tracer for "apply A to v"
+  modes/transformations/geometry.ts  moving grid, basis, v / Av, guides
+  modes/transformations/index.ts     Transformations section
+  modes/elimination/algorithm.ts     elimination tracer (one step per pseudocode line)
+  modes/elimination/geometry.ts      row picture and transformation picture
+  modes/elimination/index.ts         Gaussian Elimination section
 ```

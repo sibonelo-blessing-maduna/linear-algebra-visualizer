@@ -1,6 +1,5 @@
 import { Fraction } from '../../math/fraction';
-
-export type Rows = Fraction[][];
+import { VAR_NAMES, type Rows } from '../../math/notation';
 
 /** The pseudocode shown in the interpreter panel. Each trace step points at one of these lines. */
 export const PSEUDOCODE = [
@@ -55,8 +54,6 @@ export type Outcome =
   | { kind: 'unique'; x: Fraction[] }
   | { kind: 'infinite'; free: number[]; description: string }
   | { kind: 'none'; row: number };
-
-export const VAR_NAMES = ['x', 'y', 'z'];
 
 export function formatRow(row: Fraction[]): string {
   const coeffs = row.slice(0, -1).map((f) => f.format());

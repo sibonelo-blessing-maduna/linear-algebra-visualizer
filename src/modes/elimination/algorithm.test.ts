@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Fraction } from '../../math/fraction';
-import { PSEUDOCODE, formatEquation, traceElimination, type Rows } from './algorithm';
+import type { Rows } from '../../math/notation';
+import { PSEUDOCODE, formatEquation, traceElimination } from './algorithm';
 
 const sys = (rows: number[][]): Rows => rows.map((r) => r.map((v) => new Fraction(v)));
 

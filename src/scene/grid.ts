@@ -52,7 +52,8 @@ export function createUnitShape(dim: Dimension): THREE.Object3D {
   return group;
 }
 
-function createLabel(text: string, color: string): THREE.Sprite {
+/** A small text sprite that always faces the camera. */
+export function createLabel(text: string, color: string): THREE.Sprite {
   const canvas = document.createElement('canvas');
   canvas.width = canvas.height = 64;
   const ctx = canvas.getContext('2d')!;

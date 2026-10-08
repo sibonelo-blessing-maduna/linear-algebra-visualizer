@@ -58,6 +58,8 @@ export class EliminationGeometry {
     this.solutionDot.renderOrder = 10;
     this.bDot = new THREE.Mesh(new THREE.SphereGeometry(0.12, 24, 16), new THREE.MeshBasicMaterial({ color: 0xf472b6 }));
     this.transformGroup.add(this.transformed, this.bDot, ...this.arrows.map((a) => a.object));
+    // Arrows often lie exactly on grid lines; draw them after the grids so they stay on top.
+    this.arrows.forEach((a) => a.object.traverse((c) => (c.renderOrder = 1)));
     viewport.scene.add(this.reference, this.rowGroup, this.transformGroup);
   }
 
