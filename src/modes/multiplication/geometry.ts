@@ -49,8 +49,8 @@ export class MultiplyGeometry {
     this.bShape.matrixAutoUpdate = false;
 
     const projGeometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
-    this.projection = new THREE.Line(projGeometry, new THREE.LineDashedMaterial({ color: GUIDE_COLOR, dashSize: 0.15, gapSize: 0.1 }));
-    this.projectionDot = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 12), new THREE.MeshBasicMaterial({ color: GUIDE_COLOR }));
+    this.projection = new THREE.Line(projGeometry, new THREE.LineDashedMaterial({ color: GUIDE_COLOR, dashSize: 0.15, gapSize: 0.1, transparent: true }));
+    this.projectionDot = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 12), new THREE.MeshBasicMaterial({ color: GUIDE_COLOR, transparent: true }));
 
     const overlays = [
       ...[...this.basis, ...this.ghosts, ...this.components].map((a) => a.object),
@@ -87,7 +87,7 @@ export class MultiplyGeometry {
     const [face, edges] = createUnitShape(n).children as [THREE.Mesh, THREE.LineSegments];
     disposeChildren(face);
     (edges.material as THREE.Material).dispose();
-    edges.material = new THREE.LineDashedMaterial({ color: 0xfacc15, dashSize: 0.12, gapSize: 0.08 });
+    edges.material = new THREE.LineDashedMaterial({ color: 0xfacc15, dashSize: 0.12, gapSize: 0.08, transparent: true });
     edges.computeLineDistances();
     edges.renderOrder = 1;
     this.bShape.add(edges);

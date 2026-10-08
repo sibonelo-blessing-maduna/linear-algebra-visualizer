@@ -11,11 +11,11 @@ export class VectorArrow {
 
   constructor(color: number, opacity = 1) {
     this.object = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(), 1, color);
-    if (opacity < 1) {
-      for (const m of [this.object.line.material, this.object.cone.material] as THREE.Material[]) {
-        m.transparent = true;
-        m.opacity = opacity;
-      }
+    // Transparent even at full opacity: three.js draws transparent objects after opaque ones, so this puts
+    // arrows in the same pass as the (semi-transparent) grids, where renderOrder can keep them on top.
+    for (const m of [this.object.line.material, this.object.cone.material] as THREE.Material[]) {
+      m.transparent = true;
+      m.opacity = opacity;
     }
   }
 

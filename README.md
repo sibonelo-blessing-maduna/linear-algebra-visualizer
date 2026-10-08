@@ -15,7 +15,7 @@ npm run build    # typecheck and build to dist/
 
 ## Sections
 
-Both sections share the same layout: a step-through interpreter on the left (pseudocode with the current line highlighted, live variables, and the arithmetic in exact fractions) and the geometry on the right, animated in sync. Keyboard: <kbd>Space</kbd> play/pause, <kbd>←</kbd>/<kbd>→</kbd> step, <kbd>Home</kbd>/<kbd>End</kbd> jump.
+Every section shares the same layout: a step-through interpreter on the left (pseudocode with the current line highlighted, live variables, and the arithmetic in exact fractions) and the geometry on the right, animated in sync. Keyboard: <kbd>Space</kbd> play/pause, <kbd>←</kbd>/<kbd>→</kbd> step, <kbd>Home</kbd>/<kbd>End</kbd> jump.
 
 ### Transformations
 
@@ -44,7 +44,17 @@ Step through AB as "first B, then A":
 - **Transformation picture:** A as a grid transformation. Replacements are shears (det unchanged), swaps are reflections (det flips sign), scalings scale det. The dot for b lands on x once A has become I.
 - Examples for unique, row-swap, infinitely-many and no-solution systems.
 
-Both sections take your own input via **Custom…** (integers, fractions like `-3/2`, or decimals).
+### Eigenvectors
+
+Step through finding the directions A doesn't turn:
+
+- **Apply A:** a fan of vectors rides along with the grid; only those on eigen-directions stay gold.
+- **Search:** in 2D, one vector sweeps the circle with Av beside it; each eigen-direction is marked as it's passed.
+- **Algebra:** Av = λv ⇔ (A − λI)v = 0 ⇔ det(A − λI) = 0. λ slides while the grid of A − λI flattens at each eigenvalue, tracked on a plot of p(λ).
+- **Eigenvectors:** for each root, the grid collapses to A − λI, v is its null space, and back under A, Av lands on λv.
+- **Result:** diagonalizable or not, including repeated eigenvalues, eigenplanes and complex (rotation) cases. Roots are exact when rational, with √ forms or decimals otherwise.
+
+Every section takes your own input via **Custom…** (integers, fractions like `-3/2`, or decimals).
 
 ## Project structure
 
@@ -64,4 +74,5 @@ src/
   modes/elimination/algorithm.ts     elimination tracer (one step per pseudocode line)
   modes/elimination/geometry.ts      row picture and transformation picture
   modes/elimination/index.ts         Gaussian Elimination section
+  modes/eigen/                       Eigenvectors section (math, tracer, geometry, p(λ) chart, UI)
 ```

@@ -75,7 +75,8 @@ export function createAxes(dim: Dimension, length: number, labelAt: number): THR
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
   const lines = new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({ color: 0x64748b }));
-  lines.position.z = dim === 2 ? 0.002 : 0; // draw over the 2D grid
+  // Same depth as everything else, but drawn after the (opaque) reference grid so it stays visible.
+  lines.renderOrder = 0.5;
 
   const group = new THREE.Group();
   group.add(lines);

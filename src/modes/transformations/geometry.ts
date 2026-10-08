@@ -45,8 +45,8 @@ export class TransformGeometry {
     this.transformed.matrixAutoUpdate = false;
 
     const projGeometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
-    this.projection = new THREE.Line(projGeometry, new THREE.LineDashedMaterial({ color: AV_COLOR, dashSize: 0.15, gapSize: 0.1 }));
-    this.projectionDot = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 12), new THREE.MeshBasicMaterial({ color: AV_COLOR }));
+    this.projection = new THREE.Line(projGeometry, new THREE.LineDashedMaterial({ color: AV_COLOR, dashSize: 0.15, gapSize: 0.1, transparent: true }));
+    this.projectionDot = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 12), new THREE.MeshBasicMaterial({ color: AV_COLOR, transparent: true }));
 
     const overlays = [
       ...[...this.basis, ...this.components, this.vArrow, this.ghost, this.avArrow].map((a) => a.object),
