@@ -27,6 +27,16 @@ Step through applying a 2×2 or 3×3 matrix A to a vector v:
 - **Row picture:** each coordinate of Av is a row of A times v, shown with a guide to the axis.
 - **Determinant:** the image of the unit square/cube, with its area/volume computed by cofactor expansion.
 
+### Matrix Multiplication
+
+Step through AB as "first B, then A":
+
+- **One after another:** the grid moves by B, then A moves the already-moved grid; faint arrows keep where B left the basis vectors.
+- **Column picture:** column j of AB is A times column j of B, walked head to tail along A's columns.
+- **Row × column:** each entry is a row of A times a column of B, read off with a guide to the axis.
+- **Determinant:** the unit square/cube after B (outlined) and after AB (filled): det(AB) = det A · det B.
+- **Order matters:** paired examples like "Rotate, then shear" / "Shear, then rotate", and the result step compares AB with BA.
+
 ### Gaussian Elimination
 
 - Gauss–Jordan elimination on [A | b], with the pivot, active rows and changed entries highlighted.
@@ -50,6 +60,7 @@ src/
   modes/transformations/algorithm.ts tracer for "apply A to v"
   modes/transformations/geometry.ts  moving grid, basis, v / Av, guides
   modes/transformations/index.ts     Transformations section
+  modes/multiplication/              Matrix Multiplication section (tracer, geometry, UI)
   modes/elimination/algorithm.ts     elimination tracer (one step per pseudocode line)
   modes/elimination/geometry.ts      row picture and transformation picture
   modes/elimination/index.ts         Gaussian Elimination section

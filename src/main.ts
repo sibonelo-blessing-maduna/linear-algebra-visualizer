@@ -1,10 +1,12 @@
 import './style.css';
 import { mountTransformations } from './modes/transformations';
 import { mountElimination } from './modes/elimination';
+import { mountMultiplication } from './modes/multiplication';
 
 /** Each section mounts into the page and returns a function that tears it down. */
 const SECTIONS: Record<string, { title: string; mount: (root: HTMLElement) => () => void }> = {
   transformations: { title: 'Transformations', mount: mountTransformations },
+  multiplication: { title: 'Matrix Multiplication', mount: mountMultiplication },
   elimination: { title: 'Gaussian Elimination', mount: mountElimination },
 };
 const DEFAULT_SECTION = 'transformations';

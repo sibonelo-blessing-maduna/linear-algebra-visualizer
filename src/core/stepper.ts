@@ -6,11 +6,19 @@ import type { Dimension } from '../scene/grid';
 
 export const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+export interface InputBlock {
+  label: string;
+  /** 'n' for a square block, 1 for a single column. */
+  width: 'n' | 1;
+  /** Head each column with x, y, z instead of one label over the block. */
+  varHeaders?: boolean;
+}
+
 export interface StepperConfig {
-  /** Examples per size, as rows of an n×(n+1) matrix [A | extra column]. */
+  /** Examples per size, as rows of the input blocks side by side, e.g. [A | b]. */
   presets: Record<Dimension, Record<string, string[][]>>;
-  /** Name of the extra column, e.g. "b" for [A | b]. */
-  extraColumn: string;
+  /** Column blocks of the input, e.g. an n-wide A and a 1-wide b. */
+  blocks: InputBlock[];
   /** Title of the card holding section-specific state (matrix, equations, …). */
   stateTitle: string;
   views: { id: string; label: string }[];
@@ -276,17 +284,27 @@ export class Stepper {
 
   private renderInputs(values: string[][]): void {
     const n = this.n;
-    const extra = this.cfg.extraColumn;
+    const blocks = this.cfg.blocks.map((b) => ({ ...b, w: b.width === 'n' ? n : 1 }));
     const inputs = this.$('[data-inputs]');
-    inputs.style.gridTemplateColumns = `repeat(${n}, minmax(0, 1fr)) 2px minmax(0, 1fr)`;
-    const header =
-      VAR_NAMES.slice(0, n).map((v) => `<span class="hdr">${v}</span>`).join('') + `<span></span><span class="hdr">${esc(extra)}</span>`;
+    inputs.style.gridTemplateColumns = blocks.map((b, k) => `${k ? '2px ' : ''}repeat(${b.w}, minmax(0, 1fr))`).join(' ');
+
+    const header = blocks
+      .map((b, k) => {
+        const sep = k ? '<span></span>' : '';
+        if (b.varHeaders) return sep + VAR_NAMES.slice(0, b.w).map((v) => `<span class="hdr">${v}</span>`).join('');
+        return `${sep}<span class="hdr" style="grid-column: span ${b.w}">${esc(b.label)}</span>`;
+      })
+      .join('');
+
+    // Which block (and column within it) each input column belongs to.
+    const owner = blocks.flatMap((b, k) => Array.from({ length: b.w }, (_, c) => ({ b, k, c })));
     const cells = values
       .map((row, i) =>
         row
           .map((v, j) => {
-            const bar = j === n ? '<span class="bar"></span>' : '';
-            const label = j === n ? `${extra}${i + 1}` : `a${i + 1}${j + 1}`;
+            const { b, k, c } = owner[j];
+            const bar = k && c === 0 ? '<span class="bar"></span>' : '';
+            const label = b.w === 1 ? `${b.label}${i + 1}` : `${b.label.toLowerCase()}${i + 1}${c + 1}`;
             return `${bar}<input data-r="${i}" data-c="${j}" value="${esc(v)}" aria-label="${label}" spellcheck="false">`;
           })
           .join(''),

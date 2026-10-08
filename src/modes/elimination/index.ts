@@ -33,7 +33,10 @@ function phaseOf(line: number): string {
 export function mountElimination(root: HTMLElement): () => void {
   const stepper = new Stepper(root, {
     presets: PRESETS,
-    extraColumn: 'b',
+    blocks: [
+      { label: 'A', width: 'n', varHeaders: true },
+      { label: 'b', width: 1 },
+    ],
     stateTitle: 'Matrix and equations',
     views: [
       { id: 'rows', label: 'Row picture' },

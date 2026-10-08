@@ -30,7 +30,10 @@ const BASIS_CSS = BASIS_COLORS.map((c) => `#${c.toString(16).padStart(6, '0')}`)
 export function mountTransformations(root: HTMLElement): () => void {
   const stepper = new Stepper(root, {
     presets: PRESETS,
-    extraColumn: 'v',
+    blocks: [
+      { label: 'A', width: 'n' },
+      { label: 'v', width: 1 },
+    ],
     stateTitle: 'Matrix × vector',
     views: [{ id: 'grid', label: 'Grid' }],
   });
