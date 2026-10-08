@@ -1,0 +1,569 @@
+:root {
+  --bg: #0f1117;
+  --panel: #151821;
+  --card: #1b1f2a;
+  --border: #2a3040;
+  --text: #e6e6e6;
+  --muted: #94a3b8;
+  --accent: #38bdf8;
+  --pivot: #facc15;
+  --mono: ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Top bar ---------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 48px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+  flex-shrink: 0;
+}
+
+.brand {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+#nav {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+#nav a {
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+#nav a:hover {
+  color: var(--text);
+}
+
+#nav a.on {
+  color: var(--text);
+  background: var(--card);
+}
+
+#view {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.viewport canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+/* ---------- Transformations section ---------- */
+
+.mode-transform {
+  position: absolute;
+  inset: 0;
+}
+
+.mode-transform > .lil-gui {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.hud {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(20, 22, 30, 0.85);
+  font: 14px/1.5 var(--mono);
+  pointer-events: none;
+  white-space: pre;
+}
+
+.hud .i { color: #4ade80; }
+.hud .j { color: #f87171; }
+.hud .k { color: #60a5fa; }
+
+/* ---------- Gaussian elimination section ---------- */
+
+.elim {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(380px, 38%) 1fr;
+}
+
+.elim-panel {
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.card h2 {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.phase {
+  font-size: 12px;
+  color: var(--accent);
+}
+
+.controls {
+  position: sticky;
+  top: -12px;
+  z-index: 1;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
+}
+
+.btn-row,
+.editor-bar,
+.ctrl-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.ctrl-meta {
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.ctrl-meta label,
+.editor-bar label {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.editor-bar + .matrix-input,
+.matrix-input + .editor-bar {
+  margin-top: 10px;
+}
+
+.btn,
+select {
+  font: inherit;
+  font-size: 13px;
+  color: var(--text);
+  background: #252b3a;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+}
+
+.btn.primary {
+  background: #0c4a6e;
+  border-color: #0e7490;
+}
+
+.error {
+  color: #f87171;
+  font-size: 13px;
+}
+
+.matrix-input {
+  display: grid;
+  gap: 6px;
+  align-items: center;
+}
+
+.matrix-input .hdr {
+  text-align: center;
+  font: 12px var(--mono);
+  color: var(--muted);
+}
+
+.matrix-input .bar {
+  align-self: stretch;
+  background: var(--muted);
+  border-radius: 1px;
+}
+
+.matrix-input input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px;
+  text-align: center;
+  font: 14px var(--mono);
+  color: var(--text);
+  background: #11141b;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.matrix-input input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.matrix-input input.invalid {
+  border-color: #f87171;
+}
+
+/* Pseudocode */
+
+.code {
+  font: 13px/1.65 var(--mono);
+  background: #11141b;
+  border-radius: 8px;
+  padding: 8px 0;
+  overflow-x: auto;
+}
+
+.code-line {
+  display: flex;
+  white-space: pre;
+  padding-right: 12px;
+  border-left: 3px solid transparent;
+  color: #a5b4c8;
+}
+
+.code-line .ln {
+  width: 2.5em;
+  flex-shrink: 0;
+  text-align: right;
+  padding-right: 12px;
+  color: #475569;
+  user-select: none;
+}
+
+.code-line.active {
+  background: rgba(56, 189, 248, 0.15);
+  border-left-color: var(--accent);
+  color: #fff;
+}
+
+.code-line.active .ln {
+  color: var(--accent);
+}
+
+/* Narration */
+
+.note {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.calc {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #11141b;
+  font: 13px/1.6 var(--mono);
+  white-space: pre-wrap;
+  color: var(--pivot);
+}
+
+.vars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.vars:empty {
+  display: none;
+}
+
+.var {
+  font: 12px var(--mono);
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #252b3a;
+}
+
+.var b {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Augmented matrix */
+
+.aug {
+  border-collapse: separate;
+  border-spacing: 2px;
+  font: 15px var(--mono);
+  margin: 0 auto;
+}
+
+.aug th {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 2px 8px;
+}
+
+.aug tbody th {
+  text-align: right;
+}
+
+.aug td {
+  min-width: 3.2em;
+  padding: 6px 8px;
+  text-align: center;
+  border-radius: 6px;
+  background: #11141b;
+  transition: background 0.2s;
+}
+
+.aug td.b,
+.aug th.b {
+  border-left: 2px solid var(--muted);
+}
+
+.aug tr.focus td {
+  background: #1e2a3d;
+}
+
+.aug tr.pivot-row td {
+  background: #2a2a1a;
+}
+
+.aug td.col {
+  box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.5);
+}
+
+.aug td.pivot {
+  box-shadow: inset 0 0 0 2px var(--pivot);
+  color: var(--pivot);
+  font-weight: 700;
+}
+
+.aug td.changed {
+  animation: flash 1.2s ease-out;
+}
+
+@keyframes flash {
+  from {
+    background: rgba(56, 189, 248, 0.55);
+  }
+}
+
+.equations {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  font: 14px/1.8 var(--mono);
+}
+
+.equations li::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 3px;
+  margin-right: 10px;
+  vertical-align: middle;
+  border-radius: 2px;
+  background: var(--c);
+}
+
+/* Stage */
+
+.elim-stage {
+  position: relative;
+  min-width: 0;
+}
+
+.stage-top {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.seg {
+  display: flex;
+  background: rgba(21, 24, 33, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 3px;
+  pointer-events: auto;
+}
+
+.seg button {
+  font: inherit;
+  font-size: 13px;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.seg button.on {
+  color: var(--text);
+  background: #252b3a;
+}
+
+.stage-note {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(21, 24, 33, 0.9);
+  border: 1px solid var(--border);
+  font-size: 14px;
+  line-height: 1.5;
+  pointer-events: none;
+}
+
+.stage-note p {
+  margin: 0;
+}
+
+.det {
+  font: 600 14px var(--mono);
+  color: var(--pivot);
+  margin-bottom: 4px;
+}
+
+@media (max-width: 860px) {
+  .elim {
+    grid-template-columns: 1fr;
+    grid-template-rows: 55% 45%;
+  }
+
+  .elim-stage {
+    grid-row: 1;
+  }
+
+  .elim-panel {
+    grid-row: 2;
+    border-right: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .stage-note {
+    font-size: 12px;
+  }
+
+  .brand {
+    display: none;
+  }
+}
+
+/* Compact layout tweaks for the elimination panel */
+
+.elim-panel {
+  gap: 10px;
+}
+
+.elim-panel .card {
+  padding: 10px 12px;
+}
+
+.custom .matrix-input {
+  margin-top: 10px;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.controls .btn {
+  padding: 6px 9px;
+}
+
+.controls .play {
+  min-width: 78px;
+}
+
+.controls .speed {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.controls .speed input {
+  width: 70px;
+}
+
+.counter {
+  font: 12px var(--mono);
+  color: var(--muted);
+  min-width: 4.5em;
+  text-align: right;
+}
+
+.code {
+  font-size: 12.5px;
+  line-height: 1.5;
+}
